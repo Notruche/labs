@@ -6,6 +6,7 @@ use App\Article;
 use App\Categorie;
 use App\Tag;
 use App\Pivot;
+use App\Comment;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreArticle;
@@ -36,6 +37,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Article::class);
         $categorie= Categorie::all();
         $tags=Tag::all();
         return view('article.createArticle', compact('categorie','tags'));
@@ -49,6 +51,7 @@ class ArticleController extends Controller
      */
     public function store(StoreArticle $request)
     {
+        $this->authorize('create', Article::class);
         $new = new Article;
         $new->title = $request->title;
         $new->content = $request->content;
@@ -74,7 +77,7 @@ class ArticleController extends Controller
      */
     public function show(Article $id)
     {
-        
+        $this->authorize('view', $id);
         $article = $id ;
         return view('article.showArticle',compact('article'));
     }
@@ -87,6 +90,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $id)
     {
+        $this->authorize('update', $id);
         $article = $id ;
         $categorie= Categorie::all();
         $tags=Tag::all();
@@ -102,11 +106,13 @@ class ArticleController extends Controller
      */
     public function update(StoreArticle $request, Article $id)
     {
+        $this->authorize('update', $id);
         $id->title = $request->title;
         $id->content = $request->content;
         $id->categorie_id = $request->categorie_id;
         $id->image = $request->image->store('','image');
         $id->save();
+        Pivot::where('article_id',$id->id)->delete();
         $tag = Tag::find($request->tag_id);
         $id->tags()->attach($tag);
         return $this->index();
@@ -127,8 +133,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $id)
     {
-       
+        $this->authorize('delete', $id);
         Pivot::where('article_id',$id->id)->delete();
+        Comment::where('article_id',$id->id)->delete();
         $id->delete();
         return $this->index();
     }

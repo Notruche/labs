@@ -49,6 +49,7 @@
 				<li class="active"><a href="{{route('services')}}">Services</a></li>
 				<li><a href="{{route('blog')}}">Blog</a></li>
 				<li><a href="{{route('contact')}}">Contact</a></li>
+				<li><a href="{{ route('login') }}">Login</a></li>
 				@can("Editor")
 				<li><a href="{{route('change')}}">Add content</a></li>
 				@endcan
@@ -79,7 +80,9 @@
 		<div class="container">
 			<div class="section-title dark">
 				<h2>{{$content[6]->title}}</h2>
+				@can('Admin')
 				<a href="{{route('editContent',['id'=> $content[6]->id])}}" class="btn btn-success">Edit text</a>
+				@endcan
 			</div>
 			<div class="row">
 				@foreach($services as $item)
@@ -103,7 +106,9 @@
 			<div class="text-center">
 				<a href="{{route('services')}}" class="site-btn">{{$content[7]->title}}</a>
 				<br>
+				@can('Admin')
 				<a href="{{route('editContent',['id'=> $content[7]->id])}}" class="btn btn-success">Edit button</a>
+				@endcan
 			</div>
 		</div>
 	</div>
@@ -116,6 +121,9 @@
 		<div class="container">
 			<div class="section-title">
 				<h2>{{$content[1]->title}}</h2>
+				@can('Admin')
+				<a href="{{route('editContent',['id'=> $content[1]->id])}}" class="btn btn-success">Edit button</a>
+				@endcan
 			</div>
 			<div class="row">
 				<!-- feature item -->
@@ -169,7 +177,7 @@
 		<div class="container">
 			<div class="row">
 				<!-- Single Card -->
-				@foreach($projets2 as $item)
+				@foreach($projets as $item)
 				<div class="col-md-4 col-sm-6">
 					<div class="sv-card">
 						<div class="card-img">
@@ -193,7 +201,7 @@
 
 
 	<!-- newsletter section -->
-	<div class="newsletter-section spad">
+	<div class="newsletter-section spad" id="test">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3">
@@ -201,15 +209,15 @@
 				</div>
 				<div class="col-md-9">
 					<!-- newsletter form -->
-					<form class="nl-form" action="{{route('newsMail')}}" method="POST" enctype="multipart/form-data">
+					<form class="nl-form" action="{{route('newsMail').'#test'}}" method="POST" enctype="multipart/form-data">
 						@csrf
-						<div class="form-group">
-							<label for="email"></label>
 							<input type="text"
 							  class="form-control" placeholder="Your e-mail here" name="email" id="email" aria-describedby="helpId" value="">
-						  </div>
 						<button class="site-btn btn-2" type="submit">Newsletter</button>
 					</form>
+					@isset($validation)
+				<div class="test-success">E-mail ajouté à la newsletter !</div>
+				@endisset
 					@if($errors->has('email'))
 					@foreach($errors->get('email') as $error)
 					<div class="text-danger">{{$error}}</div>
@@ -259,7 +267,8 @@
 				</div>
 				<!-- contact form -->
 				<div class="col-md-6 col-pull">
-					<form class="form-class" id="con_form">
+					<form class="form-class" id="con_form" action="{{route('sendMail').'#test'}}" method="POST" enctype="multipart/form-data">
+						@csrf
 						<div class="row">
 							<div class="col-sm-6">
 								<input type="text" name="name" placeholder="Your name">
@@ -270,9 +279,24 @@
 							<div class="col-sm-12">
 								<input type="text" name="subject" placeholder="Subject">
 								<textarea name="message" placeholder="Message"></textarea>
-								<a href="{{route('sendMail')}}" class="site-btn">send</a>
 							</div>
 						</div>
+						@if($errors->has('name'))
+						@foreach($errors->get('name') as $error)
+						<div class="text-danger">{{$error}}</div>
+						@endforeach
+						@endif
+						@if($errors->has('email'))
+						@foreach($errors->get('email') as $error)
+						<div class="text-danger">{{$error}}</div>
+						@endforeach
+						@endif
+						@if($errors->has('subject'))
+						@foreach($errors->get('subject') as $error)
+						<div class="text-danger">{{$error}}</div>
+						@endforeach
+						@endif
+						<button class="site-btn" type="submit">send</button>
 					</form>
 				</div>
 			</div>

@@ -26,6 +26,7 @@ class ServiceController extends Controller
 
     public function home()
     {
+        $this->authorize('edit', Content::class);
         $services = Service::all();
         return view('gestionServices.services',compact('services'));
     }
@@ -37,6 +38,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
+        $this->authorize('edit', Content::class);
         return view('gestionServices.createService');
     }
 
@@ -48,6 +50,7 @@ class ServiceController extends Controller
      */
     public function store(StoreService $request)
     {
+        $this->authorize('edit', Content::class);
         $new = new Service;
         $new->title = $request->title;
         $new->desc = $request->desc;
@@ -64,6 +67,7 @@ class ServiceController extends Controller
      */
     public function show(Service $id)
     {
+        $this->authorize('edit', Content::class);
         $service = $id ;
         return view('gestionServices.showService',compact('service'));
     }
@@ -76,12 +80,14 @@ class ServiceController extends Controller
      */
     public function edit(Service $id)
     {
+        $this->authorize('edit', Content::class);
         $service = $id ;
         return view('gestionServices.editService',compact('service'));
     }
 
     public function editIcon(Service $id)
     {
+        $this->authorize('edit', Content::class);
         $service = $id ;
         return view('gestionServices.editIcon',compact('service'));
     }
@@ -95,16 +101,17 @@ class ServiceController extends Controller
      */
     public function update(StoreService $request, Service $id)
     {
+        $this->authorize('edit', Content::class);
         $id->title = $request->title;
         $id->desc = $request->desc;
+        $id->icon = $request->icon;
         $id->save();
         return $this->home();
     }
 
     public function updateIcon(StoreService $request, Service $id)
     {
-        $id->icon = $request->icon;
-        $id->save();
+
         return $this->home();
     }
 
@@ -116,6 +123,7 @@ class ServiceController extends Controller
      */
     public function destroy(Service $id)
     {
+        $this->authorize('edit', Content::class);
         $id->delete();
         return $this->home();
     }

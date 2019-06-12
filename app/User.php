@@ -50,6 +50,16 @@ class User extends Authenticatable
     return $this->hasMany('App\Comment','user_id','id');
     }
 
+    public function categorie()
+    {
+    return $this->hasMany('App\Categorie','user_id','id');
+    }
+
+    public function tag()
+    {
+    return $this->hasMany('App\Tag','user_id','id');
+    }
+
     public function article()
     {
     return $this->hasMany('App\Article','user_id','id');

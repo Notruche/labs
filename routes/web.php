@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
@@ -65,7 +63,7 @@ Route::get('/home/testimonial/edit/{id}','TestimonialController@edit')->name('ed
 
 Route::put('home/testimonial/update/{id}','TestimonialController@update')->name('updateTestimonial');
 
-Route::get('/home/mail', 'HomeController@mail')->name('sendMail');
+Route::post('/home/mail', 'HomeController@mail')->name('sendMail');
 
 Route::get('/home/change/service', 'ServiceController@home')->name('changeServices');
 
@@ -111,6 +109,10 @@ Route::get('/home/article', 'ArticleController@index')->name('article');
 
 Route::get('/home/article/list', 'ArticleController@indexlist')->name('articlelist');
 
+Route::get('/home/tag/list', 'TagController@indexlist')->name('taglist');
+
+Route::get('/home/categorie/list', 'CategorieController@indexlist')->name('categorielist');
+
 Route::get('/home/article/create', 'ArticleController@create')->name('createArticle');
 
 Route::get('/home/article/show/{id}', 'ArticleController@show')->name('showArticle');
@@ -122,6 +124,12 @@ Route::get('/home/article/edit/{id}','ArticleController@edit')->name('editArticl
 Route::put('home/article/update/{id}','ArticleController@update')->name('updateArticle');
 
 Route::put('home/article/valid/{id}','ArticleController@valid')->name('validArticle');
+
+Route::put('home/comment/valid/{id}','CommentController@valid')->name('validComment');
+
+Route::put('home/tag/valid/{id}','TagController@valid')->name('validTag');
+
+Route::put('home/categorie/valid/{id}','CategorieController@valid')->name('validCategorie');
 
 Route::delete('/home/article/delete/{id}','ArticleController@destroy')->name('deleteArticle');
 
@@ -173,9 +181,9 @@ Route::delete('/comment/tag/delete/{id}','CommentController@destroy')->name('del
 
 Route::get('/blog/search', 'BlogController@filter')->name('searchArticle');
 
-Route::get('/blog/search/categorie', 'BlogController@filterCate')->name('searchCategorie');
+Route::get('/blog/search/categorie/{id}', 'BlogController@filterCate')->name('searchCategorie');
 
-Route::get('/blog/search/tag', 'BlogController@filterTag')->name('searchTag');
+Route::get('/blog/search/tag/{tag}', 'BlogController@filterTag')->name('searchTag');
 
 Route::get('/blog/show/{id}', 'BlogController@show')->name('showBlog');
 

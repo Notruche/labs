@@ -15,7 +15,6 @@ margin-right: 30px;">
 </div>
 
 <a href="{{route('editService',['id'=> $service->id])}}" class="btn btn-success">Edit</a>
-<a href="{{route('editServiceicon',['id'=> $service->id])}}" class="btn btn-success">Edit icon</a>
 <form action="{{route('deleteService',['id'=>$service->id])}}" method="post">
     @method('DELETE')
     @csrf

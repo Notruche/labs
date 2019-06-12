@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call(TestimonialSeeder::class);
         $this->call(ServicesSeeder::class);
         $this->call(ProjectSeeder::class);
-        $this->call(CategorieSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(TagSeeder::class);
+        $this->call(CategorieSeeder::class);
         $this->call(ArticleSeeder::class);
         $this->call(CommentSeeder::class);
-        $this->call(TagSeeder::class);
         $this->call(PivotSeeder::class);
     }
 }

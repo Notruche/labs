@@ -12,6 +12,8 @@ use App\Subscriber;
 use App\Testimonial;
 use App\Events\MailEvent;
 use App\Http\Requests\StoreNewsletter;
+use App\Http\Requests\StoreContent;
+use App\Http\Requests\StoreContact;
 
 class HomeController extends Controller
 {
@@ -20,12 +22,12 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    //public function __construct()
+    //{
+        //$this->middleware('auth');
+    //}
 
-    public function mail(Request $request)
+    public function mail(StoreContact $request)
     {
         event(new MailEvent($request));
         return redirect()->back();
@@ -54,9 +56,17 @@ class HomeController extends Controller
         $logo = Logo::all();
         $testimonials = Testimonial::all();
         $services = Service::paginate(9);
-        $users = User::paginate(3);
+        $use=User::where('role_id',2)->get();
+        $user1 = $use->random(1);
+        $user2=User::where('role_id',1)->paginate(1);
+        $user3=$use->random(1);
+        if($user1 == $user3){
+            return $this->index();
+        }
+        else{
         $randomserv= $services->random(3);
-        return view('home',compact('content','mainImage','logo','testimonials','services','randomserv','users'));
+        return view('welcome',compact('content','mainImage','logo','testimonials','services','randomserv','user1','user2','user3'));
+    }
     }
 
     /**
@@ -99,12 +109,14 @@ class HomeController extends Controller
      */
     public function edit(Content $id)
     {
+        $this->authorize('edit', Content::class);
         $content = $id ;
         return view('editContent',compact('content'));
     }
 
     public function editLogo()
     {
+        $this->authorize('edit', Content::class);
         $logo = Logo::all();
         return view('editLogo',compact('logo'));
     }
@@ -116,8 +128,9 @@ class HomeController extends Controller
      * @param  \App\Content  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Content $id)
+    public function update(StoreContent $request, Content $id)
     {
+        $this->authorize('edit', Content::class);
         $id->title = $request->title;
         $id->save();
         return $this->index();
@@ -125,6 +138,7 @@ class HomeController extends Controller
 
     public function updateLogo(Request $request, Logo $id)
     {
+        $this->authorize('edit', Content::class);
         $id->img = $request->img->store('','image');
         $id->save();
         return $this->index();

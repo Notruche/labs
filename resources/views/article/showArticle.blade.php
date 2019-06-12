@@ -16,10 +16,12 @@
 
 <div><img src="{{Storage::disk('image')->url($article->image)}}" style="max-width:100%"></div>
 @endif
+@can('update',$article)
 <a href="{{route('editArticle',['id'=> $article->id])}}" class="btn btn-success">Edit</a>
 <form action="{{route('deleteArticle',['id'=>$article->id])}}" method="post">
     @method('DELETE')
     @csrf
     <button class="btn btn-danger" type="submit">Delete article</button>
     </form>
+    @endcan
 @stop

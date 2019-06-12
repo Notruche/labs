@@ -6,6 +6,8 @@ use App\Pivot;
 use App\Article;
 use App\User;
 use App\Comment;
+use App\Tag;
+use App\Categorie;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -23,8 +25,11 @@ class PivotController extends Controller
 
     public function content()
     {
-        $article = Article::where('user_id','LIKE','%'.Auth::id().'%')->get();
-        return view('contenu',compact('article'));
+        $article = Article::where('user_id',Auth::id())->get();
+        $comment = Comment::where('user_id',Auth::id())->get();
+        $tag = Tag::where('user_id',Auth::id())->get();
+        $categorie = Categorie::where('user_id',Auth::id())->get();
+        return view('contenu',compact('article','comment','tag','categorie'));
 
     }
 
@@ -32,7 +37,9 @@ class PivotController extends Controller
     {
         $article = Article::where('validation','en attente')->get();
         $comment = Comment::where('validation','en attente')->get();
-        return view('validate',compact('article','comment'));
+        $tag = Tag::where('validation','en attente')->get();
+        $categorie = Categorie::where('validation','en attente')->get();
+        return view('validate',compact('article','comment','tag','categorie'));
 
     }
 

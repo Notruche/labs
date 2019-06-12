@@ -16,6 +16,9 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('validation')->default('en attente');
+            $table->unsignedInteger('user_id')->default(1);
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

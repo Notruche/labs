@@ -50,6 +50,7 @@
 				<li><a href="{{route('services')}}">Services</a></li>
 				<li class="active"><a href="{{route('blog')}}">Blog</a></li>
 				<li><a href="{{route('contact')}}">Contact</a></li>
+				<li><a href="{{ route('login') }}">Login</a></li>
 				@can("Editor")
 				<li><a href="{{route('change')}}">Add content</a></li>
 				@endcan
@@ -72,11 +73,6 @@
 			</div>
 		</div>
 	</div>
-	@can('Admin')
-	<a href="{{route('article')}}" class="btn btn-primary">Display Articles</a>
-	<a href="{{route('categorie')}}" class="btn btn-primary">Display Catégories</a>
-	<a href="{{route('tag')}}" class="btn btn-primary">Display Tags</a>
-	@endcan
 	<!-- Page header end-->
 
 
@@ -86,6 +82,9 @@
 			<div class="row">
 				<div class="col-md-8 col-sm-7 blog-posts">
 					<!-- Post item -->
+					@if(count($article) == 0)
+					<h2>Désolé, aucun résultat trouvé</h2>
+					@endif
 					@foreach($article as $item)
 					<div class="post-item">
 						<div class="post-thumbnail">
@@ -130,13 +129,11 @@
 						<h2 class="widget-title">Categories</h2>
 						<ul>
 							@foreach($categorie as $item)
+							@if($item->validation=="valide")
 							<li>
-							<form action="{{route('searchCategorie')}}" class="search-form" method="GET" role="search">
-									@csrf
-							<input type="hidden" placeholder="Search" name="search" value="{{$item->id}}">
-							<button type="submit">{{$item->name}}</button>
-								</form>
+								<a href="{{route('searchCategorie',['id'=> $item->id])}}">{{$item->name}}</a>
 							</li>
+							@endif
 							
 							@endforeach
 						</ul>
@@ -158,13 +155,11 @@
 						<h2 class="widget-title">Tags</h2>
 						<ul class="tag">
 								@foreach($tags as $item)
+								@if($item->validation=="valide")
 								<li>
-									<form action="{{route('searchTag')}}" class="search-form" method="GET" role="search">
-											@csrf
-									<input type="hidden" placeholder="Search" name="search" value="{{$item->id}}">
-									<button type="submit">{{$item->name}}</button>
-										</form>
+									<a href="{{route('searchTag',['tag'=> $item->id])}}">{{$item->name}}</a>
 								</li>
+								@endif
 								@endforeach
 						</ul>
 					</div>

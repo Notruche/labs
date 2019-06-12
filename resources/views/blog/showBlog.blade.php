@@ -50,7 +50,10 @@
 				<li><a href="{{route('services')}}">Services</a></li>
 				<li class="active"><a href="{{route('blog')}}">Blog</a></li>
 				<li><a href="{{route('contact')}}">Contact</a></li>
-				<li><a href="elements.html">Elements</a></li>
+				<li><a href="{{ route('login') }}">Login</a></li>
+				@can("Editor")
+				<li><a href="{{route('change')}}">Add content</a></li>
+				@endcan
 			</ul>
 		</nav>
 	</header>
@@ -123,7 +126,7 @@
 								
 								<li>
 									<div class="avatar">
-											@if($item->user->image == "storage/img/avatar/01.jpg")
+											@if($item->user->image == "storage/img/avatar/01.jpg" || $item->user->image == "storage/img/avatar/02.jpg" || $item->user->image == "storage/img/avatar/03.jpg")
 											<img src="{{asset($item->user->image)}}">
 											@else
 											<img src="{{Storage::disk('image')->url($item->user->image)}}">
@@ -138,6 +141,7 @@
 							</ul>
 						</div>
 						<!-- Commert Form -->
+						@can('Editor')
 						<div class="row">
 							<div class="col-md-9 comment-from">
 								<h2>Leave a comment</h2>
@@ -153,6 +157,7 @@
 								</form>
 							</div>
 						</div>
+						@endcan
 					</div>
 				</div>
 <!-- Sidebar area -->
@@ -170,13 +175,11 @@
 		<h2 class="widget-title">Categories</h2>
 		<ul>
 			@foreach($categorie as $item)
+			@if($item->validation=="valide")
 			<li>
-			<form action="{{route('searchCategorie')}}" class="search-form" method="GET" role="search">
-					@csrf
-			<input type="hidden" placeholder="Search" name="search" value="{{$item->id}}">
-			<button type="submit">{{$item->name}}</button>
-				</form>
+				<a href="{{route('searchCategorie',['id'=> $item->id])}}">{{$item->name}}</a>
 			</li>
+			@endif
 			
 			@endforeach
 		</ul>
@@ -197,15 +200,13 @@
 	<div class="widget-item">
 		<h2 class="widget-title">Tags</h2>
 		<ul class="tag">
-				@foreach($tags as $item)
-				<li>
-					<form action="{{route('searchTag')}}" class="search-form" method="GET" role="search">
-							@csrf
-					<input type="hidden" placeholder="Search" name="search" value="{{$item->id}}">
-					<button type="submit">{{$item->name}}</button>
-						</form>
-				</li>
-				@endforeach
+			@foreach($tags as $item)
+			@if($item->validation=="valide")
+			<li>
+				<a href="{{route('searchTag',['tag'=> $item->id])}}">{{$item->name}}</a>
+			</li>
+			@endif
+			@endforeach
 		</ul>
 	</div>
 	<!-- Single widget -->

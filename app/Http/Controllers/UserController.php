@@ -7,6 +7,7 @@ use App\User;
 use App\Comment;
 use App\Article;
 use App\Role;
+use App\Pivot;
 
 class UserController extends Controller
 {
@@ -95,6 +96,13 @@ class UserController extends Controller
      */
     public function destroy(User $id)
     {
-        //
+        
+        foreach($id->article as $item){
+        Pivot::where('article_id',$item->id)->delete();
+        };
+        Comment::where('user_id',$id->id)->delete();
+        Article::where('user_id',$id->id)->delete();
+        $id->delete();
+        return $this->index();
     }
 }

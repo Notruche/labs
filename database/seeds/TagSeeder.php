@@ -15,36 +15,43 @@ class TagSeeder extends Seeder
         Tag::create([
 
             'name' => "branding",
+            'validation' => 'valide',
 
             ]);
             Tag::create([
 
                 'name' => "identity",
+                'validation' => 'valide',
     
                 ]);
                 Tag::create([
 
                     'name' => "video",
+                    'validation' => 'valide',
         
                     ]);
                     Tag::create([
 
                         'name' => "design",
+                        'validation' => 'valide',
             
                         ]);
                         Tag::create([
 
                             'name' => "inspiration",
+                            'validation' => 'valide',
                 
                             ]);
                             Tag::create([
 
                                 'name' => "web design",
+                                'validation' => 'valide',
                     
                                 ]);
                                 Tag::create([
 
                                     'name' => "photography",
+                                    'validation' => 'valide',
                         
                                     ]);
     }

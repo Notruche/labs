@@ -16,6 +16,7 @@ class CommentController extends Controller
      */
     public function index()
     {
+        $this->authorize('edit', Content::class);
         $comments = Comment::all();
         return view('comment.comment', compact('comments'));
     }
@@ -27,6 +28,7 @@ class CommentController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Article::class);
         return view('comment.createComment');
     }
 
@@ -38,12 +40,20 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Article::class);
         $new = new Comment;
         $new->content = $request->content;
         $new->article_id = $request->article_id;
         $new->user_id = Auth::id();
         $new->date = Carbon::now()->format('d M Y');;
         $new->save(); 
+        return back();
+    }
+
+    public function valid(Request $request, Comment $id)
+    {
+        $id->validation = $request->validation;
+        $id->save();
         return back();
     }
 
@@ -55,6 +65,7 @@ class CommentController extends Controller
      */
     public function show(Comment $id)
     {
+        $this->authorize('view', $id);
         $comment = $id ;
         return view('comment.showComment',compact('comment'));
     }
@@ -80,6 +91,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $id)
     {
+        $this->authorize('update', $id);
         $id->comment = $request->comment;
         $id->save();
         return $this->index();
@@ -93,6 +105,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $id)
     {
+        $this->authorize('delete', $id);
         $id->delete();
         return $this->index();
     }

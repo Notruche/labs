@@ -49,7 +49,10 @@
 				<li><a href="{{route('services')}}">Services</a></li>
 				<li><a href="{{route('blog')}}">Blog</a></li>
 				<li class="active"><a href="{{route('contact')}}">Contact</a></li>
+				<li><a href="{{ route('login') }}">Login</a></li>
+				@can('Editor')
 				<li><a href="{{route('change')}}">Add content</a></li>
+				@endcan
 			</ul>
 		</nav>
 	</header>

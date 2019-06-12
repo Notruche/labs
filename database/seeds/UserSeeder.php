@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@molengeek.com',
             'password' => bcrypt('azertyuiop'),
             'image'=>'storage/img/avatar/01.jpg',
+            'portrait'=>'storage/img/team/1.jpg',
             'role_id' => 1,
 
             ]);
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
                 'email' => 'editor1@molengeek.com',
                 'password' => bcrypt('azertyuiop'),
                 'image'=>'storage/img/avatar/02.jpg',
+                'portrait'=>'storage/img/team/2.jpg',
                 'role_id' => 2,
     
                 ]);
@@ -38,6 +40,7 @@ class UserSeeder extends Seeder
                     'email' => 'editor2@molengeek.com',
                     'password' => bcrypt('azertyuiop'),
                     'image'=>'storage/img/avatar/03.jpg',
+                    'portrait'=>'storage/img/team/3.jpg',
                     'role_id' => 2,
         
                     ]);

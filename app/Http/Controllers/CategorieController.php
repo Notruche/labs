@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Categorie;
+use App\Article;
+use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategorie;
 
@@ -18,6 +20,12 @@ class CategorieController extends Controller
         return view('change');
     }
 
+    public function indexlist()
+    {
+        $categories = Categorie::all();
+        return view('categories.categorie',compact('categories'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -25,6 +33,7 @@ class CategorieController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Categorie::class);
         return view('categories.createCategorie');
     }
 
@@ -36,8 +45,10 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorie $request)
     {
+        $this->authorize('create', Categorie::class);
         $new = new Categorie;
         $new->name = $request->name;
+        $new->user_id = Auth::id();
         $new->save(); 
         return $this->index();
     }
@@ -50,6 +61,7 @@ class CategorieController extends Controller
      */
     public function show(Categorie $id)
     {
+        $this->authorize('view', Categorie::class);
         $categorie = $id ;
         return view('categories.showCategorie',compact('categorie'));
     }
@@ -62,6 +74,7 @@ class CategorieController extends Controller
      */
     public function edit(Categorie $id)
     {
+        $this->authorize('create', Categorie::class);
         $categorie = $id ;
         return view('categories.editCategorie',compact('categorie'));
     }
@@ -75,6 +88,7 @@ class CategorieController extends Controller
      */
     public function update(StoreCategorie $request, Categorie $id)
     {
+        $this->authorize('update', $id);
         $id->name = $request->name;
         $id->save();
         return $this->index();
@@ -88,7 +102,16 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $id)
     {
+        $this->authorize('delete', $id);
+        Article::where('categorie_id',$id->id)->delete();
         $id->delete();
         return $this->index();
+    }
+
+    public function valid(Request $request, Categorie $id)
+    {
+        $id->validation = $request->validation;
+        $id->save();
+        return back();
     }
 }

@@ -35,7 +35,9 @@
       <div class="form-group">
         <select name="categorie_id" id="categorie_id">
             @foreach($categorie as $item)
+            @if($item->validation == 'valide')
         <option value="{{$item->id}}">{{$item->name}}</option>
+        @endif
         @endforeach
         </select>
     </div>
@@ -46,8 +48,10 @@
     <div class="form-group">
     @foreach($tags as $tag)
       <br>
+      @if($tag->validation == 'valide')
       <input type="checkbox" name="tag_id[]" value="{{$tag->id}}">
       <h6>{{$tag->name}}</h6>
+      @endif
       @endforeach
   </div> 
 

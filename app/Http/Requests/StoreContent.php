@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTestimonials extends FormRequest
+class StoreContent extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,14 @@ class StoreTestimonials extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'required|image',
-            'name' => 'required',
-           'rank' => 'required',
-            'comment' => 'required|max:180',
+            'title' => 'required|max:360|alpha',
         ];
     }
 
     public function messages(){
         return[
-        'image.required'=> "Veuillez placer une image",
-        'image.image'=> "Le fichier doit être une image",
-        'name.required'=> "Veuillez indiquer le nom",
-        'rank.required'=> "Veuillez indiquer la profession",
-        'comment.required'=> "Veuillez laisser un commentaire",
+        'title.required'=> "Veuillez entrer du texte",
+        'title.max:360'=> "Le texte est trop long !",
         ];
     }
 }

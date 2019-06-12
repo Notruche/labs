@@ -15,6 +15,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $this->authorize('edit', Content::class);
         $projets = Project::all();
         return view('projets.projets',compact('projets'));
     }
@@ -26,6 +27,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $this->authorize('edit', Content::class);
         return view('projets.createProjet');
     }
 
@@ -37,6 +39,7 @@ class ProjectController extends Controller
      */
     public function store(StoreProjet $request)
     {
+        $this->authorize('edit', Content::class);
         $new = new Project;
         $new->title = $request->title;
         $new->desc = $request->desc;
@@ -54,6 +57,7 @@ class ProjectController extends Controller
      */
     public function show(Project $id)
     {
+        $this->authorize('edit', Content::class);
         $projet = $id ;
         return view('projets.showProjet',compact('projet'));
     }
@@ -66,6 +70,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $id)
     {
+        $this->authorize('edit', Content::class);
         $projet = $id ;
         return view('projets.editProjet',compact('projet'));
     }
@@ -79,6 +84,7 @@ class ProjectController extends Controller
      */
     public function update(StoreProjet $request, Project $id)
     {
+        $this->authorize('edit', Content::class);
         $id->title = $request->title;
         $id->desc = $request->desc;
         $id->icon = $request->icon;

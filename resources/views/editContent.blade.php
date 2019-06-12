@@ -15,6 +15,11 @@
     <textarea type="text"
       class="form-control" name="title" id="title" aria-describedby="helpId" placeholder="">{{$content->title}}</textarea>
   </div>
+  @if($errors->has('title'))
+  @foreach($errors->get('title') as $error)
+  <div class="text-danger">{{$error}}</div>
+  @endforeach
+  @endif
 <button type="submit"> Submit </button>
 </form>
 @stop

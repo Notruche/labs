@@ -24,8 +24,8 @@ class BlogController extends Controller
     public function index()
     {
         $article = Article::where('validation','valide')->paginate(3);
-        $categorie = Categorie::all();
-        $tags = Tag::all();
+        $categorie = Categorie::has('article')->get();
+        $tags = Tag::has('articles')->get();
         return view('blog.blog', compact('article','categorie','tags'));
     }
 
@@ -35,33 +35,33 @@ class BlogController extends Controller
             $article = Article::where([
                 ['title','LIKE','%'.$search.'%'],
                 ['validation','valide']])->paginate(3);
-            $categorie = Categorie::all();
-            $tags = Tag::all();
+                $categorie = Categorie::has('article')->get();
+                $tags = Tag::has('articles')->get();
             if(count($article) > 0)
                 return view('blog.blog',compact('article','categorie','tags'));
             else return view ('blog.blog',compact('article','categorie','tags'))->withMessage('No Details found. Try to search again !');
     }
 
-    public function filterCate(Request $request)
+    public function filterCate(Categorie $id)
     {
-            $search = Input::get ('search');
+            $search = $id->id;
             $article = Article::where([
-                ['categorie_id','LIKE','%'.$search.'%'],
+                ['categorie_id',$search],
                 ['validation','valide']])->paginate(3);
-            $categorie = Categorie::all();
-            $tags = Tag::all();
+                $categorie = Categorie::has('article')->get();
+                $tags = Tag::has('articles')->get();
             if(count($article) > 0)
                 return view('blog.blog',compact('article','categorie','tags'));
             else return view ('blog.blog',compact('article','categorie','tags'))->withMessage('No Details found. Try to search again !');
     }
 
-    public function filterTag(Request $request)
+    public function filterTag(Tag $tag)
     {
-        $search = Input::get ('search');
-        $article = Article::whereHas('tags',function($q) use ($search) {$q->where([['tag_id',$search],['validation','valide']]);
+        $id = $tag->id;
+        $article = Article::whereHas('tags',function($q) use ($id) {$q->where([['tag_id',$id],['validation','valide']]);
         })->paginate(3);
-        $categorie = Categorie::all();
-        $tags = Tag::all();
+        $categorie = Categorie::has('article')->get();
+        $tags = Tag::has('articles')->get();
         if(count($article) > 0)
             return view('blog.blog',compact('article','categorie','tags'));
         else return view ('blog.blog',compact('article','categorie','tags'))->withMessage('No Details found. Try to search again !');
@@ -102,8 +102,8 @@ class BlogController extends Controller
             ['article_id',$article->id],
             ['validation','valide'],
         ])->get();
-        $categorie = Categorie::all();
-        $tags = Tag::all();
+        $categorie = Categorie::has('article')->get();
+        $tags = Tag::has('articles')->get();
         return view('blog.showBlog',compact('article','categorie','tags','comment'));
     }
 

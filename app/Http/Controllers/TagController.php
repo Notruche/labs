@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
+use App\Pivot;
+use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTag;
 
@@ -18,6 +20,13 @@ class TagController extends Controller
         return view('change');
     }
 
+    public function indexlist()
+    {
+        $this->authorize('view', Tag::class);
+        $tags = Tag::all();
+        return view('tags.tags',compact('tags'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -25,6 +34,7 @@ class TagController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Tag::class);
         return view('tags.createTag');
     }
 
@@ -36,7 +46,9 @@ class TagController extends Controller
      */
     public function store(StoreTag $request)
     {
+        $this->authorize('create', Tag::class);
         $new = new Tag;
+        $new->user_id = Auth::id();
         $new->name = $request->name;
         $new->save(); 
         return $this->index();
@@ -50,6 +62,7 @@ class TagController extends Controller
      */
     public function show(Tag $id)
     {
+        $this->authorize('view', Tag::class);
         $tag = $id ;
         return view('tags.showTag',compact('tag'));
     }
@@ -62,6 +75,7 @@ class TagController extends Controller
      */
     public function edit(Tag $id)
     {
+        $this->authorize('create', Tag::class);
         $tag = $id ;
         return view('tags.editTag',compact('tag'));
     }
@@ -75,9 +89,17 @@ class TagController extends Controller
      */
     public function update(StoreTag $request, Tag $id)
     {
+        $this->authorize('update', $id);
         $id->name = $request->name;
         $id->save();
         return $this->index();
+    }
+
+    public function valid(Request $request, Tag $id)
+    {
+        $id->validation = $request->validation;
+        $id->save();
+        return back();
     }
 
     /**
@@ -88,6 +110,8 @@ class TagController extends Controller
      */
     public function destroy(Tag $id)
     {
+        $this->authorize('delete', $id);
+        Pivot::where('tag_id',$id->id)->delete();
         $id->delete();
         return $this->index();
     }
